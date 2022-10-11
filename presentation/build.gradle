@@ -3,6 +3,10 @@ apply plugin: 'kotlin-android'
 
 dependencies {
 
+    implementation project(':utils')
+    implementation project(':domain')
+    implementation project(':scopeinjection')
+
     // Koin
     implementation deps.koin.core
     implementation deps.koin.scope
