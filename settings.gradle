@@ -1,0 +1,7 @@
+include ':scopeinjection'
+include ':presentation'
+include ':domain'
+include ':data'
+include ':utils'
+include ':app'
+rootProject.name = "Star Wars App MVVM"
