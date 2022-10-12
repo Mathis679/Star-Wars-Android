@@ -1,6 +1,7 @@
 package com.example.data.mapper
 
 import com.example.data.repository.film.api.FilmDto
+import com.example.data.repository.film.api.FilmListDto
 import com.example.domain.model.Film
 import com.example.utils.extension.extractUrlId
 import com.example.utils.extension.safe
@@ -32,6 +33,10 @@ class FilmMapper {
                 arrayList.add(toFilm(it))
             }
             return arrayList
+        }
+
+        fun toFilmList(filmDtoList: FilmListDto): List<Film>{
+            return filmDtoList.results?.let { toFilmList(it) } ?: listOf()
         }
     }
 }

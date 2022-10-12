@@ -10,7 +10,6 @@ dependencies {
     api project(':utils')
     implementation project(':domain')
 
-    implementation project(':scopeinjection')
 
     implementation deps.kotlin.stdlib
     implementation deps.kotlin.ktx

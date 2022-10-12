@@ -2,6 +2,8 @@ package com.example.starwarsappmvvm
 
 import android.app.Application
 import com.example.data.di.repositoryModule
+import com.example.domain.di.useCaseModule
+import com.example.presentation.di.presentationModule
 import com.example.starwarsappmvvm.di.appModule
 import com.example.starwarsappmvvm.di.networkModule
 import com.example.starwarsappmvvm.di.serviceModule
@@ -27,7 +29,9 @@ class BaseApplication: Application() {
                 appModule,
                 networkModule,
                 repositoryModule,
-                serviceModule
+                serviceModule,
+                useCaseModule,
+                presentationModule
         )
     }
 

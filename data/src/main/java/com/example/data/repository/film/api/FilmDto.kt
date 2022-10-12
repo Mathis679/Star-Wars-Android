@@ -37,3 +37,11 @@ data class FilmDto (
         @SerializedName("species")
         val species: List<String>?
         )
+
+data class FilmListDto(
+        @SerializedName("count")
+        val count: Int,
+
+        @SerializedName("results")
+        val results: List<FilmDto>?
+)

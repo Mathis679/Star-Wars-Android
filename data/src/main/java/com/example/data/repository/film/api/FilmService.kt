@@ -10,7 +10,7 @@ import retrofit2.http.Path
 interface FilmService {
 
     @GET(GET_ALL_FILMS)
-    fun getAllFilms(): Observable<Response<List<FilmDto>>>
+    fun getAllFilms(): Observable<Response<FilmListDto>>
 
     @GET(GET_FILM)
     fun getFilm(@Path("id") id: String): Observable<Response<FilmDto>>
