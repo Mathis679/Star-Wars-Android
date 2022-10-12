@@ -36,4 +36,7 @@ dependencies {
     //RxJava
     api deps.reactive.rxjava
     api deps.reactive.rxandroid
+
+    //Gson
+    api deps.network.gson
 }
