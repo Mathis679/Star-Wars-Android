@@ -1,8 +1,10 @@
 package com.example.starwarsappmvvm
 
 import android.app.Application
+import com.example.data.di.repositoryModule
 import com.example.starwarsappmvvm.di.appModule
 import com.example.starwarsappmvvm.di.networkModule
+import com.example.starwarsappmvvm.di.serviceModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -23,7 +25,9 @@ class BaseApplication: Application() {
     private fun allModules(): List<Module> {
         return listOf(
                 appModule,
-                networkModule
+                networkModule,
+                repositoryModule,
+                serviceModule
         )
     }
 
