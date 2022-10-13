@@ -1,5 +1,6 @@
 package com.example.utils.extension
 
+import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
@@ -8,6 +9,10 @@ import org.koin.core.qualifier.named
 import org.koin.core.scope.Scope
 
 fun AppCompatActivity.getOrCreateScope(scopeId: String, qualifier: String): Scope {
+    return getKoin().getOrCreateScope(scopeId, named(qualifier))
+}
+
+fun ComponentActivity.getOrCreateScope(scopeId: String, qualifier: String): Scope {
     return getKoin().getOrCreateScope(scopeId, named(qualifier))
 }
 

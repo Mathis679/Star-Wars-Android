@@ -22,6 +22,7 @@ dependencies {
     api deps.lifecycle.extensions
     api deps.lifecycle.java8
     api deps.lifecycle.livedata
+    api deps.lifecycle.viewmodel
     kapt deps.lifecycle.compiler
 
     api deps.kotlin.stdlib
@@ -39,4 +40,13 @@ dependencies {
 
     //Gson
     api deps.network.gson
+
+    //Compose
+    api deps.compose.ui
+    api deps.compose.ui_tooling
+    api deps.compose.foundation
+    api deps.compose.material
+    api deps.compose.material_icons
+    api deps.compose.livedata
+    api deps.compose.activity
 }

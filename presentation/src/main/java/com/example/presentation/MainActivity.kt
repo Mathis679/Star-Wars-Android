@@ -1,15 +1,17 @@
 package com.example.presentation
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.material.Text
 import com.example.utils.constants.FEED_FILMS_SCOPE_ID
 import com.example.utils.constants.FEED_FILMS_SCOPE_NAME
 import com.example.utils.extension.getOrCreateScope
 import com.example.utils.extension.getViewModelScope
 import org.koin.androidx.scope.bindScope
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : ComponentActivity() {
     private val feedFilmViewModelScope =
             getOrCreateScope(FEED_FILMS_SCOPE_ID, FEED_FILMS_SCOPE_NAME)
     private val feedFilmViewModel =
@@ -17,7 +19,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContent {
+            Text("Hello world!")
+        }
+
 
         bindScope(feedFilmViewModelScope)
 
