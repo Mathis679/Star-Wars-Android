@@ -6,24 +6,36 @@ import com.example.domain.exception.Failure
 import com.example.domain.functional.Either
 import com.example.domain.interactor.GetAllFilms
 import com.example.domain.model.Film
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 abstract class FeedFilmViewModel(
         protected val getAllFilms: GetAllFilms
 ) : BaseViewModel(getAllFilms){
 
-    abstract fun loadAllFilms(): LiveData<Either<Failure, List<Film>>>
+    abstract val films: StateFlow<List<Film>>
 }
 
 class FeedFilmViewModelImpl(
         getAllFilms: GetAllFilms
 ): FeedFilmViewModel(getAllFilms){
 
-    override fun loadAllFilms(): LiveData<Either<Failure, List<Film>>> {
-        val obsResult = MutableLiveData<Either<Failure, List<Film>>>()
+    private val _films = MutableStateFlow<List<Film>>(emptyList())
+    override val films: StateFlow<List<Film>> = _films
+
+    init {
+        loadAllFilms()
+    }
+
+    private fun loadAllFilms() {
         getAllFilms(Any()){
-            obsResult.postValue(it)
+            it.fold({
+
+            }, {
+                _films.value = it
+                Any()
+            })
         }
-        return obsResult
     }
 }
 
