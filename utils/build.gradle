@@ -49,4 +49,5 @@ dependencies {
     api deps.compose.material_icons
     api deps.compose.livedata
     api deps.compose.activity
+    api deps.compose.navigation
 }

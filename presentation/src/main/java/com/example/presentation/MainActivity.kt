@@ -4,49 +4,40 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import com.example.domain.model.Film
-import com.example.utils.constants.FEED_FILMS_SCOPE_ID
-import com.example.utils.constants.FEED_FILMS_SCOPE_NAME
+import androidx.navigation.compose.rememberNavController
+import com.example.presentation.navigation.setUpNavController
+import com.example.presentation.ui.theme.StarWarsAppMVVMTheme
+import com.example.utils.constants.SCOPE_ID
+import com.example.utils.constants.SCOPE_NAME
 import com.example.utils.extension.getOrCreateScope
 import com.example.utils.extension.getViewModelScope
 import org.koin.androidx.scope.bindScope
 
 class MainActivity : ComponentActivity() {
-    private val feedFilmViewModelScope =
-            getOrCreateScope(FEED_FILMS_SCOPE_ID, FEED_FILMS_SCOPE_NAME)
-    private val feedFilmViewModel =
-            feedFilmViewModelScope.getViewModelScope<FeedFilmViewModel>()
+    private val viewModelScope =
+            getOrCreateScope(SCOPE_ID, SCOPE_NAME)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val films by feedFilmViewModel?.films?.collectAsState() as State<List<Film>>
-            AppTheme {
-                FeedFilms(films = films)
+            StarWarsAppMVVMTheme {
+                Surface(
+                    color = MaterialTheme.colors.primary,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    setUpNavController(rememberNavController(), viewModelScope)
+                }
             }
         }
 
 
-        bindScope(feedFilmViewModelScope)
+        bindScope(viewModelScope)
 
-    }
-
-    @Composable
-    fun AppTheme(content: @Composable () -> Unit){
-        val colors = lightColors(
-            primary = Color(0xff272727)
-        )
-        MaterialTheme(colors = colors, content = content)
     }
 }
