@@ -50,4 +50,5 @@ dependencies {
     api deps.compose.livedata
     api deps.compose.activity
     api deps.compose.navigation
+    api deps.compose.pager
 }

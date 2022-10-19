@@ -4,6 +4,7 @@ import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
@@ -16,9 +17,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.domain.model.Film
 import com.example.utils.extension.getViewModelScope
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
 import org.koin.core.scope.Scope
 
 
+@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun FeedFilms(viewModelScope: Scope) {
     val feedFilmViewModel =
@@ -28,22 +32,17 @@ fun FeedFilms(viewModelScope: Scope) {
     if(films.isEmpty()){
         LoadingView()
     }
-    LazyColumn{
-        items(
-            films.size,
-            key = {
-                films[it].id
-            }
-        ) {
-            FilmItem(film = films[it])
-        }
+
+    HorizontalPager(count = films.size) {
+        FilmItem(film = films[it])
     }
 }
 
 @Composable
 fun FilmItem(film: Film){
     Text(
-        text = film.title
+        text = film.title,
+        modifier = Modifier.fillMaxWidth()
     )
 }
 
