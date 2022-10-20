@@ -71,6 +71,7 @@ deps.reactive = reactive
 
 def compose = [:]
 compose.ui = "androidx.compose.ui:ui:$versions.compose"
+compose.ui_util = "androidx.compose.ui:ui-util:$versions.compose"
 compose.ui_tooling = "androidx.compose.ui:ui-tooling:$versions.compose"
 compose.foundation = "androidx.compose.foundation:foundation:$versions.compose"
 compose.material = "androidx.compose.material:material:$versions.compose"

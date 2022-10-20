@@ -6,17 +6,13 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.compose.material.lightColors
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.navigation.compose.rememberNavController
 import com.example.presentation.navigation.setUpNavController
 import com.example.presentation.ui.theme.StarWarsAppMVVMTheme
 import com.example.utils.constants.SCOPE_ID
 import com.example.utils.constants.SCOPE_NAME
 import com.example.utils.extension.getOrCreateScope
-import com.example.utils.extension.getViewModelScope
 import org.koin.androidx.scope.bindScope
 
 class MainActivity : ComponentActivity() {

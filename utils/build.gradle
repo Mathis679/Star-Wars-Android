@@ -43,6 +43,7 @@ dependencies {
 
     //Compose
     api deps.compose.ui
+    api deps.compose.ui_util
     api deps.compose.ui_tooling
     api deps.compose.foundation
     api deps.compose.material
