@@ -4,9 +4,8 @@ import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -72,13 +71,9 @@ fun FeedFilms(viewModelScope: Scope) {
 
 @Composable
 fun FilmItem(film: Film, modifier: Modifier){
-    LazyColumn (modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally){
-        item {
-            TitleFilm(film = film)
-        }
-        item {
-            ContentFilm(film = film)
-        }
+    Column (modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally){
+        TitleFilm(film = film)
+        ContentFilm(film = film)
     }
 
 }
@@ -93,6 +88,7 @@ fun TitleFilm(film: Film){
         Text(
             text = film.title,
             modifier = Modifier
+                .fillMaxWidth()
                 .padding(16.dp),
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold,
@@ -103,13 +99,110 @@ fun TitleFilm(film: Film){
 
 @Composable
 fun ContentFilm(film: Film){
-    Text(
-        text = film.openingCrawl,
-        modifier = Modifier
-            .padding(top = 16.dp),
-        fontSize = 16.sp,
-        textAlign = TextAlign.Center
-    )
+    LazyColumn (horizontalAlignment = Alignment.CenterHorizontally){
+        item {
+            Text(
+                text = film.openingCrawl,
+                modifier = Modifier
+                    .padding(top = 16.dp),
+                fontSize = 16.sp,
+                textAlign = TextAlign.Center
+            )
+        }
+        item {
+            Row {
+                Text(
+                    text = "director : ",
+                    modifier = Modifier
+                        .padding(top = 16.dp),
+                    fontSize = 16.sp,
+                    textAlign = TextAlign.Center,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = film.director,
+                    modifier = Modifier
+                        .padding(top = 16.dp),
+                    fontSize = 16.sp,
+                    textAlign = TextAlign.Center
+                )
+            }
+        }
+        item {
+            Row {
+                Text(
+                    text = "producer : ",
+                    modifier = Modifier
+                        .padding(top = 16.dp),
+                    fontSize = 16.sp,
+                    textAlign = TextAlign.Center,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = film.producer,
+                    modifier = Modifier
+                        .padding(top = 16.dp),
+                    fontSize = 16.sp,
+                    textAlign = TextAlign.Center
+                )
+            }
+        }
+        item {
+            Button(
+                onClick = {
+
+                },
+                colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.background),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(text = "View characters")
+            }
+        }
+        item {
+            Button(
+                onClick = {
+
+                },
+                colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.background),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(text = "View planets")
+            }
+        }
+        item {
+            Button(
+                onClick = {
+
+                },
+                colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.background),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(text = "View starships")
+            }
+        }
+        item {
+            Button(
+                onClick = {
+
+                },
+                colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.background),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(text = "View vehicles")
+            }
+        }
+        item {
+            Button(
+                onClick = {
+
+                },
+                colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.background),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(text = "View species")
+            }
+        }
+    }
 }
 
 @Composable
