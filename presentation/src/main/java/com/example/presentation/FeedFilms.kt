@@ -2,6 +2,7 @@ package com.example.presentation
 
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -9,9 +10,11 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -42,6 +45,7 @@ fun FeedFilms(viewModelScope: Scope) {
         FilmItem(film = films[it], Modifier
             .fillMaxWidth()
             .padding(32.dp)
+            .border(1.dp, MaterialTheme.colors.secondary, MaterialTheme.shapes.medium)
             .graphicsLayer {
                 // Calculate the absolute offset for the current page from the
                 // scroll position. We use the absolute value which allows us to mirror
@@ -82,8 +86,7 @@ fun FilmItem(film: Film, modifier: Modifier){
 fun TitleFilm(film: Film){
     Surface(
         color = MaterialTheme.colors.primaryVariant,
-        shape = MaterialTheme.shapes.medium,
-        elevation = 8.dp
+        shape = MaterialTheme.shapes.medium
     ) {
         Text(
             text = film.title,
@@ -153,9 +156,16 @@ fun ContentFilm(film: Film){
 
                 },
                 colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.background),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
             ) {
-                Text(text = "View characters")
+                Text(
+                    text = "View characters",
+                    color = Color.White,
+                    fontFamily = FontFamily.Default,
+                    fontSize = 16.sp
+                )
             }
         }
         item {
@@ -164,9 +174,16 @@ fun ContentFilm(film: Film){
 
                 },
                 colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.background),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
             ) {
-                Text(text = "View planets")
+                Text(
+                    text = "View planets",
+                    color = Color.White,
+                    fontFamily = FontFamily.Default,
+                    fontSize = 16.sp
+                )
             }
         }
         item {
@@ -175,9 +192,16 @@ fun ContentFilm(film: Film){
 
                 },
                 colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.background),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
             ) {
-                Text(text = "View starships")
+                Text(
+                    text = "View starships",
+                    color = Color.White,
+                    fontFamily = FontFamily.Default,
+                    fontSize = 16.sp
+                )
             }
         }
         item {
@@ -186,9 +210,16 @@ fun ContentFilm(film: Film){
 
                 },
                 colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.background),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
             ) {
-                Text(text = "View vehicles")
+                Text(
+                    text = "View vehicles",
+                    color = Color.White,
+                    fontFamily = FontFamily.Default,
+                    fontSize = 16.sp
+                )
             }
         }
         item {
@@ -197,9 +228,16 @@ fun ContentFilm(film: Film){
 
                 },
                 colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.background),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
             ) {
-                Text(text = "View species")
+                Text(
+                    text = "View species",
+                    color = Color.White,
+                    fontFamily = FontFamily.Default,
+                    fontSize = 16.sp
+                )
             }
         }
     }
@@ -226,6 +264,8 @@ fun LoadingView(){
         .fillMaxSize()
         .graphicsLayer {
             rotationZ = imageAnimatable.value * 360
+            scaleX = imageAnimatable.value
+            scaleY = imageAnimatable.value
         },
         contentAlignment = Alignment.Center
     ){
