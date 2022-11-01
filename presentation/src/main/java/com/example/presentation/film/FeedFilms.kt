@@ -2,10 +2,8 @@ package com.example.presentation
 
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -21,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.lerp
 import com.example.domain.model.Film
+import com.example.utils.DateUtil
 import com.example.utils.extension.getViewModelScope
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -45,7 +44,6 @@ fun FeedFilms(viewModelScope: Scope) {
         FilmItem(film = films[it], Modifier
             .fillMaxWidth()
             .padding(32.dp)
-            .border(1.dp, MaterialTheme.colors.secondary, MaterialTheme.shapes.medium)
             .graphicsLayer {
                 // Calculate the absolute offset for the current page from the
                 // scroll position. We use the absolute value which allows us to mirror
@@ -75,18 +73,21 @@ fun FeedFilms(viewModelScope: Scope) {
 
 @Composable
 fun FilmItem(film: Film, modifier: Modifier){
-    Column (modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally){
-        TitleFilm(film = film)
-        ContentFilm(film = film)
+    Surface(modifier = modifier, elevation = 8.dp, shape = MaterialTheme.shapes.medium) {
+        Column (
+            horizontalAlignment = Alignment.CenterHorizontally
+        ){
+            TitleFilm(film = film)
+            ContentFilm(film = film)
+        }
     }
-
 }
 
 @Composable
 fun TitleFilm(film: Film){
     Surface(
         color = MaterialTheme.colors.primaryVariant,
-        shape = MaterialTheme.shapes.medium
+        elevation = 8.dp
     ) {
         Text(
             text = film.title,
@@ -103,6 +104,16 @@ fun TitleFilm(film: Film){
 @Composable
 fun ContentFilm(film: Film){
     LazyColumn (horizontalAlignment = Alignment.CenterHorizontally){
+        item {
+            Text(
+                text = DateUtil.displayDate(film.releaseDate),
+                modifier = Modifier
+                    .padding(top = 16.dp),
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center
+            )
+        }
         item {
             Text(
                 text = film.openingCrawl,
