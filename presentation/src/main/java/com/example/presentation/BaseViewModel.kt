@@ -9,7 +9,6 @@ abstract class BaseViewModel(vararg useCases: UseCase<*, *>) : ViewModel() {
 
     @CallSuper
     override fun onCleared() {
-        useCases.forEach { it.dispose() }
         super.onCleared()
     }
 }

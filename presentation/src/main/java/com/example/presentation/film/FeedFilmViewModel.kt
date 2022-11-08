@@ -2,6 +2,7 @@ package com.example.presentation
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.example.domain.exception.Failure
 import com.example.domain.functional.Either
 import com.example.domain.interactor.GetAllFilms
@@ -28,7 +29,7 @@ class FeedFilmViewModelImpl(
     }
 
     private fun loadAllFilms() {
-        getAllFilms(Any()){
+        getAllFilms(Any(), viewModelScope){
             it.fold({
 
             }, {

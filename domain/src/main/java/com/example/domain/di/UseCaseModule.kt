@@ -5,6 +5,6 @@ import com.example.domain.interactor.GetFilm
 import org.koin.dsl.module
 
 val useCaseModule = module {
-    factory { GetAllFilms(filmRepository = get(), schedulerProvider = get()) }
-    factory { GetFilm(filmRepository = get(), schedulerProvider = get()) }
+    factory { GetAllFilms(filmRepository = get()) }
+    factory { GetFilm(filmRepository = get()) }
 }

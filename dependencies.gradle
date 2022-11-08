@@ -7,8 +7,6 @@ versions.support = "1.0.0"
 versions.retrofit = "2.7.2"
 versions.constraint_layout = "2.0.4"
 versions.kotlin = "1.7.20"
-versions.rxandroid = "2.1.1"
-versions.rxjava = "2.1.1"
 versions.koin = "2.0.1"
 versions.gson = "2.8.5"
 versions.activity = "1.2.1"
@@ -63,11 +61,6 @@ koin.scope = "org.koin:koin-androidx-scope:$versions.koin"
 koin.android_architecture = "org.koin:koin-android-architecture:$versions.koin"
 koin.viewmodel = "org.koin:koin-androidx-viewmodel:$versions.koin"
 deps.koin = koin
-
-def reactive = [:]
-reactive.rxandroid = "io.reactivex.rxjava2:rxandroid:$versions.rxandroid"
-reactive.rxjava = "io.reactivex.rxjava2:rxjava:$versions.rxjava"
-deps.reactive = reactive
 
 def compose = [:]
 compose.ui = "androidx.compose.ui:ui:$versions.compose"

@@ -34,10 +34,6 @@ dependencies {
     api deps.koin.android
     api deps.koin.viewmodel
 
-    //RxJava
-    api deps.reactive.rxjava
-    api deps.reactive.rxandroid
-
     //Gson
     api deps.network.gson
 

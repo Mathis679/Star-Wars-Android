@@ -1,7 +1,6 @@
 package com.example.starwarsappmvvm.di
 
 import android.content.Context
-import com.example.data.retrofitutils.RxAdapterFactory
 import com.example.starwarsappmvvm.config.API_URL
 import com.example.starwarsappmvvm.di.Properties.TIME_OUT
 import com.google.gson.Gson
@@ -19,8 +18,7 @@ val networkModule = module {
     single {
         getRetrofit(
                 okHttpClient = get(),
-                gsonFactory = get(),
-                rxAdapterFactory = get()
+                gsonFactory = get()
         )
     }
 
@@ -32,18 +30,15 @@ val networkModule = module {
         )
     }
     single { getGsonConverterFactory(gson = get()) }
-    single { getRxAdapterFactory(context = get()) }
 }
 
 fun getRetrofit(
         okHttpClient: OkHttpClient,
-        gsonFactory: GsonConverterFactory,
-        rxAdapterFactory: RxAdapterFactory
+        gsonFactory: GsonConverterFactory
 ): Retrofit {
     return Retrofit.Builder()
             .baseUrl(API_URL)
             .addConverterFactory(gsonFactory)
-            .addCallAdapterFactory(rxAdapterFactory)
             .client(okHttpClient)
             .build()
 }
@@ -68,10 +63,6 @@ fun getOkHttpClient(
 
 fun getGsonConverterFactory(gson: Gson): GsonConverterFactory {
     return GsonConverterFactory.create(gson)
-}
-
-fun getRxAdapterFactory(context: Context): RxAdapterFactory {
-    return RxAdapterFactory(context)
 }
 
 object Properties {

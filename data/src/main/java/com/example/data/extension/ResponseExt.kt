@@ -2,13 +2,12 @@ package com.example.data.extension
 
 import com.example.domain.exception.Failure
 import com.example.domain.functional.Either
-import io.reactivex.Observable
 import retrofit2.Response
 
-fun <T, R> Observable<Response<T>>.toEither(transformer: (T) -> R): Observable<Either<Failure, R>> {
-    return map {
-        if (it.isSuccessful) {
-            val body = it.body()
+
+fun <T, R> Response<T>.toEither(transformer: (T) -> R): Either<Failure, R> {
+    return if (isSuccessful) {
+            val body = body()
             if (body != null) {
                 Either.Right(transformer(body))
             } else {
@@ -20,7 +19,6 @@ fun <T, R> Observable<Response<T>>.toEither(transformer: (T) -> R): Observable<E
                 }
             }
         } else {
-            Either.Left(Failure.codeToFailure(it.code()))
+            Either.Left(Failure.codeToFailure(code()))
         }
-    }
 }

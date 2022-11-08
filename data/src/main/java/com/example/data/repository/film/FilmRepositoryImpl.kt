@@ -8,15 +8,14 @@ import com.example.domain.exception.Failure
 import com.example.domain.functional.Either
 import com.example.domain.model.Film
 import com.example.domain.repository.FilmRepository
-import io.reactivex.Observable
 
 class FilmRepositoryImpl(private val filmService: FilmService): FilmRepository {
 
-    override fun getAllFilms(): Observable<Either<Failure, List<Film>>> {
+    override suspend fun getAllFilms(): Either<Failure, List<Film>> {
         return filmService.getAllFilms().toEither(::toFilmList)
     }
 
-    override fun getFilm(id: Int): Observable<Either<Failure, Film>> {
+    override suspend fun getFilm(id: Int): Either<Failure, Film> {
         return filmService.getFilm(id.toString()).toEither(::toFilm)
     }
 }
