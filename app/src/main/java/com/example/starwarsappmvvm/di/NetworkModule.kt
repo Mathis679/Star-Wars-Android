@@ -1,8 +1,10 @@
 package com.example.starwarsappmvvm.di
 
 import android.content.Context
+import com.example.domain.exception.NoInternetException
 import com.example.starwarsappmvvm.config.API_URL
 import com.example.starwarsappmvvm.di.Properties.TIME_OUT
+import com.example.utils.NetworkUtil
 import com.google.gson.Gson
 import okhttp3.*
 import org.koin.android.ext.koin.androidApplication
@@ -26,10 +28,13 @@ val networkModule = module {
 
     single {
         getOkHttpClient(
-                cache = get()
+            cache = get(),
+            interceptor = get()
         )
     }
     single { getGsonConverterFactory(gson = get()) }
+
+    single { getConnectivityInterceptor(context = androidApplication()) }
 }
 
 fun getRetrofit(
@@ -49,7 +54,8 @@ fun getOkHttpCache(context: Context): Cache {
 }
 
 fun getOkHttpClient(
-        cache: Cache
+        cache: Cache,
+        interceptor: Interceptor
 ): OkHttpClient {
 
     val okHttpClientBuilder = OkHttpClient.Builder()
@@ -57,12 +63,24 @@ fun getOkHttpClient(
         connectTimeout(TIME_OUT, TimeUnit.SECONDS)
         readTimeout(TIME_OUT, TimeUnit.SECONDS)
         cache(cache)
+        addInterceptor(interceptor)
     }
     return okHttpClientBuilder.build()
 }
 
 fun getGsonConverterFactory(gson: Gson): GsonConverterFactory {
     return GsonConverterFactory.create(gson)
+}
+
+fun getConnectivityInterceptor(context: Context): Interceptor {
+    return Interceptor {
+
+        if(!NetworkUtil.isConnected(context))
+            throw NoInternetException()
+
+        it.proceed(it.request().newBuilder().build())
+
+    }
 }
 
 object Properties {
