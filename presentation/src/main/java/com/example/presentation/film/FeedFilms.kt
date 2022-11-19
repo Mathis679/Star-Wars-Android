@@ -336,9 +336,8 @@ fun LoadingView(){
     Box(modifier = Modifier
         .fillMaxSize()
         .graphicsLayer {
-            rotationZ = imageAnimatable.value * 360
-            scaleX = imageAnimatable.value
-            scaleY = imageAnimatable.value
+            scaleX = if(imageAnimatable.value < 0.5f) imageAnimatable.value else 1f-imageAnimatable.value
+            scaleY = if(imageAnimatable.value < 0.5f) imageAnimatable.value else 1f-imageAnimatable.value
         },
         contentAlignment = Alignment.Center
     ){
@@ -352,6 +351,6 @@ fun LoadingImage(){
         painterResource(R.drawable.ic_stormtrooper),
         contentDescription = "stormtrooper loading",
         contentScale = ContentScale.Crop,
-        modifier = Modifier.size(150.dp)
+        modifier = Modifier.size(300.dp)
     )
 }
