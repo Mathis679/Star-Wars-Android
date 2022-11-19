@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.AlignmentLine
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -33,6 +34,7 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.calculateCurrentOffsetForPage
 import com.google.accompanist.pager.rememberPagerState
 import org.koin.core.scope.Scope
+import kotlin.random.Random
 
 
 @OptIn(ExperimentalPagerApi::class)
@@ -119,7 +121,9 @@ fun FilmsIndicator(numberOfItems: Int, currentPage: Int){
     if(numberOfItems > 0){
         Row(modifier = Modifier.padding(16.dp, 16.dp, 16.dp, 8.dp)) {
             for (i in 0 until numberOfItems){
-                Divider(modifier = Modifier.weight(1f).padding(4.dp), thickness = 2.dp, color = if(currentPage == i) Color.White else MaterialTheme.colors.primaryVariant)
+                Divider(modifier = Modifier
+                    .weight(1f)
+                    .padding(4.dp), thickness = 2.dp, color = if(currentPage == i) Color.White else MaterialTheme.colors.primaryVariant)
             }
         }
     }
@@ -321,8 +325,40 @@ fun ContentFilm(film: Film){
 
 @Composable
 fun LoadingView(){
+    var height by remember {
+        mutableStateOf(0)
+    }
     var width by remember {
         mutableStateOf(0)
+    }
+    Box(modifier = Modifier
+        .fillMaxSize()
+        .onGloballyPositioned {
+            width = it.size.width
+            height = it.size.height
+        },
+        contentAlignment = Alignment.CenterStart
+    ){
+        Particles(height = height, width = width)
+        LoadingImage(width = width)
+    }
+}
+
+@Composable
+fun LoadingImage(width: Int){
+    val rotateImageAnimatable = remember {
+        Animatable(0f)
+    }
+    LaunchedEffect(key1 = rotateImageAnimatable){
+        rotateImageAnimatable.animateTo(
+            targetValue = 1.5f,
+            animationSpec = infiniteRepeatable(
+                animation = keyframes {
+                    durationMillis = 1500
+                },
+                repeatMode = RepeatMode.Restart
+            )
+        )
     }
     val scaleImageAnimatable = remember {
         Animatable(0f)
@@ -353,40 +389,6 @@ fun LoadingView(){
             )
         )
     }
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .graphicsLayer {
-            val scaleOffset = 0.5f
-            val widthToTranslate = width - 150.dp.toPx()
-            scaleX = if(scaleImageAnimatable.value < scaleOffset) scaleX - (scaleImageAnimatable.value/2) else scaleX - ((1f-scaleImageAnimatable.value)/2)
-            scaleY = if(scaleImageAnimatable.value < scaleOffset) scaleY - (scaleImageAnimatable.value/2) else scaleY - ((1f-scaleImageAnimatable.value)/2)
-            translationX = if(translateImageAnimatable.value < 0.5f) widthToTranslate * translateImageAnimatable.value * 2 else widthToTranslate * (1f - translateImageAnimatable.value) * 2
-        }
-        .onGloballyPositioned {
-            width = it.size.width
-        },
-        contentAlignment = Alignment.CenterStart
-    ){
-        LoadingImage()
-    }
-}
-
-@Composable
-fun LoadingImage(){
-    val rotateImageAnimatable = remember {
-        Animatable(0f)
-    }
-    LaunchedEffect(key1 = rotateImageAnimatable){
-        rotateImageAnimatable.animateTo(
-            targetValue = 1.5f,
-            animationSpec = infiniteRepeatable(
-                animation = keyframes {
-                    durationMillis = 1500
-                },
-                repeatMode = RepeatMode.Restart
-            )
-        )
-    }
     Image(
         painterResource(R.drawable.ic_spaceship),
         contentDescription = "spaceship loading",
@@ -394,7 +396,63 @@ fun LoadingImage(){
         modifier = Modifier
             .size(150.dp)
             .graphicsLayer {
-                rotationY = if(rotateImageAnimatable.value > 1f && rotateImageAnimatable.value <= 1.5f) (rotateImageAnimatable.value - 1f) * 360 else rotationY
+                val scaleOffset = 0.5f
+                val widthToTranslate = width - 150.dp.toPx()
+                scaleX =
+                    if (scaleImageAnimatable.value < scaleOffset) scaleX - (scaleImageAnimatable.value / 2) else scaleX - ((1f - scaleImageAnimatable.value) / 2)
+                scaleY =
+                    if (scaleImageAnimatable.value < scaleOffset) scaleY - (scaleImageAnimatable.value / 2) else scaleY - ((1f - scaleImageAnimatable.value) / 2)
+                translationX =
+                    if (translateImageAnimatable.value < 0.5f) widthToTranslate * translateImageAnimatable.value * 2 else widthToTranslate * (1f - translateImageAnimatable.value) * 2
+                rotationY =
+                    if (rotateImageAnimatable.value > 1f && rotateImageAnimatable.value <= 1.5f) (rotateImageAnimatable.value - 1f) * 360 else rotationY
             }
     )
+}
+
+@Composable
+fun LoadingParticle(height: Int, position: Float){
+    with(LocalDensity.current){
+        val dpPos = position.toDp()
+        val translationAnimatable = remember {
+            Animatable(0f)
+        }
+        LaunchedEffect(key1 = translationAnimatable){
+            translationAnimatable.animateTo(
+                targetValue = 1f,
+                animationSpec = infiniteRepeatable(
+                    animation = keyframes {
+                        durationMillis = Random.nextInt(500, 1000)
+                        delayMillis = Random.nextInt(0, 1000)
+                    },
+                    repeatMode = RepeatMode.Restart
+                )
+            )
+        }
+        Box(
+            Modifier
+                .fillMaxSize()
+                .padding(dpPos, 0.dp, 0.dp, 0.dp)
+        ) {
+            if(translationAnimatable.value > 0)
+                Divider(
+                    thickness = Random.nextInt(20, 50).dp,
+                    color = Color.White,
+                    modifier = Modifier
+                        .width(2.dp)
+                        .graphicsLayer {
+                            translationY = height * translationAnimatable.value
+                        }
+                        .alpha(Random.nextInt(50, 100).toFloat() / 100f)
+                )
+        }
+    }
+
+}
+
+@Composable
+fun Particles(height: Int, width: Int){
+    for (i in 0..50){
+        LoadingParticle(height = height, position = (width.toFloat() / 50f)*i)
+    }
 }
