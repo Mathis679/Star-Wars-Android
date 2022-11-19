@@ -1,5 +1,6 @@
 package com.example.presentation
 
+import android.util.Log
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -14,7 +15,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.AlignmentLine
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -318,11 +321,14 @@ fun ContentFilm(film: Film){
 
 @Composable
 fun LoadingView(){
-    val imageAnimatable = remember {
+    var width by remember {
+        mutableStateOf(0)
+    }
+    val scaleImageAnimatable = remember {
         Animatable(0f)
     }
-    LaunchedEffect(key1 = imageAnimatable){
-        imageAnimatable.animateTo(
+    LaunchedEffect(key1 = scaleImageAnimatable){
+        scaleImageAnimatable.animateTo(
             targetValue = 1f,
             animationSpec = infiniteRepeatable(
                 animation = keyframes {
@@ -333,13 +339,33 @@ fun LoadingView(){
             )
         )
     }
+    val translateImageAnimatable = remember {
+        Animatable(0f)
+    }
+    LaunchedEffect(key1 = translateImageAnimatable){
+        translateImageAnimatable.animateTo(
+            targetValue = 1f,
+            animationSpec = infiniteRepeatable(
+                animation = keyframes {
+                    durationMillis = 4000
+                },
+                repeatMode = RepeatMode.Restart
+            )
+        )
+    }
     Box(modifier = Modifier
         .fillMaxSize()
         .graphicsLayer {
-            scaleX = if(imageAnimatable.value < 0.5f) imageAnimatable.value else 1f-imageAnimatable.value
-            scaleY = if(imageAnimatable.value < 0.5f) imageAnimatable.value else 1f-imageAnimatable.value
+            val scaleOffset = 0.5f
+            val widthToTranslate = width - 150.dp.toPx()
+            scaleX = if(scaleImageAnimatable.value < scaleOffset) scaleX - (scaleImageAnimatable.value/2) else scaleX - ((1f-scaleImageAnimatable.value)/2)
+            scaleY = if(scaleImageAnimatable.value < scaleOffset) scaleY - (scaleImageAnimatable.value/2) else scaleY - ((1f-scaleImageAnimatable.value)/2)
+            translationX = if(translateImageAnimatable.value < 0.5f) widthToTranslate * translateImageAnimatable.value * 2 else widthToTranslate * (1f - translateImageAnimatable.value) * 2
+        }
+        .onGloballyPositioned {
+            width = it.size.width
         },
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.CenterStart
     ){
         LoadingImage()
     }
@@ -347,10 +373,28 @@ fun LoadingView(){
 
 @Composable
 fun LoadingImage(){
+    val rotateImageAnimatable = remember {
+        Animatable(0f)
+    }
+    LaunchedEffect(key1 = rotateImageAnimatable){
+        rotateImageAnimatable.animateTo(
+            targetValue = 1.5f,
+            animationSpec = infiniteRepeatable(
+                animation = keyframes {
+                    durationMillis = 1500
+                },
+                repeatMode = RepeatMode.Restart
+            )
+        )
+    }
     Image(
-        painterResource(R.drawable.ic_stormtrooper),
-        contentDescription = "stormtrooper loading",
+        painterResource(R.drawable.ic_spaceship),
+        contentDescription = "spaceship loading",
         contentScale = ContentScale.Crop,
-        modifier = Modifier.size(300.dp)
+        modifier = Modifier
+            .size(150.dp)
+            .graphicsLayer {
+                rotationY = if(rotateImageAnimatable.value > 1f && rotateImageAnimatable.value <= 1.5f) (rotateImageAnimatable.value - 1f) * 360 else rotationY
+            }
     )
 }
