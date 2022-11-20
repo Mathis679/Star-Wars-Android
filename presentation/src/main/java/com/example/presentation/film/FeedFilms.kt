@@ -1,10 +1,9 @@
 package com.example.presentation
 
-import android.util.Log
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -15,7 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.layout.AlignmentLine
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
@@ -37,16 +35,15 @@ import org.koin.core.scope.Scope
 import kotlin.random.Random
 
 
-@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun FeedFilms(viewModelScope: Scope) {
     val feedFilmViewModel =
         viewModelScope.getViewModelScope<FeedFilmViewModel>()
     val films by feedFilmViewModel?.films?.collectAsState() as State<List<Film>>
 
-    var filmPosition by remember { mutableStateOf(0) }
+    var tapCount by remember { mutableStateOf(0) }
 
-    if(films.isEmpty()){
+    if(films.isEmpty() || (tapCount%10 == 0 && tapCount != 0)){
         LoadingView()
     }
 
@@ -59,9 +56,12 @@ fun FeedFilms(viewModelScope: Scope) {
             color = Color.White,
             modifier = Modifier
                 .padding(16.dp, 16.dp, 0.dp, 0.dp)
+                .clickable {
+                    tapCount++
+                }
         )
         Text(
-            text = "Here is the film's list...",
+            text = if(tapCount%10 in 7..9) "${10 - (tapCount%10)} more click ;)" else "Here is the film's list...",
             fontSize = 20.sp,
             fontWeight = FontWeight.SemiBold,
             textAlign = TextAlign.Start,
@@ -70,50 +70,60 @@ fun FeedFilms(viewModelScope: Scope) {
                 .padding(16.dp, 0.dp, 0.dp, 0.dp)
                 .alpha(0.7f)
         )
-        FilmsIndicator(numberOfItems = films.size, currentPage = filmPosition)
-        val pagerState = rememberPagerState()
-
-        LaunchedEffect(pagerState) {
-            // Collect from the pager state a snapshotFlow reading the currentPage
-            snapshotFlow { pagerState.currentPage }.collect { page ->
-                filmPosition = page
-            }
+        
+        if(tapCount == 0 || tapCount%10 != 0){
+            FilmsList(films = films)
         }
-        HorizontalPager(
-            count = films.size,
-            state = pagerState
-        ) {
-            FilmItem(film = films[it], Modifier
-                .fillMaxWidth()
-                .padding(0.dp, 16.dp, 0.dp, 0.dp)
-                .graphicsLayer {
-                    // Calculate the absolute offset for the current page from the
-                    // scroll position. We use the absolute value which allows us to mirror
-                    // any effects for both directions
-                    val pageOffset = calculateCurrentOffsetForPage(it)
+        
+    }
+}
 
-                    // We animate the scaleX + scaleY, between 85% and 100%
-                    lerp(
-                        start = 0.85f,
-                        stop = 1f,
-                        fraction = 1f - pageOffset.coerceIn(0f, 1f)
-                    ).also { scale ->
-                        scaleX = scale
-                        scaleY = scale
-                    }
+@OptIn(ExperimentalPagerApi::class)
+@Composable
+fun FilmsList(films: List<Film>){
+    var filmPosition by remember { mutableStateOf(0) }
+    
+    FilmsIndicator(numberOfItems = films.size, currentPage = filmPosition)
+    val pagerState = rememberPagerState()
 
-                    // We animate the alpha, between 50% and 100%
-                    alpha = lerp(
-                        start = 0.5f,
-                        stop = 1f,
-                        fraction = 1f - pageOffset.coerceIn(0f, 1f)
-                    )
-                }
-            )
+    LaunchedEffect(pagerState) {
+        // Collect from the pager state a snapshotFlow reading the currentPage
+        snapshotFlow { pagerState.currentPage }.collect { page ->
+            filmPosition = page
         }
     }
+    HorizontalPager(
+        count = films.size,
+        state = pagerState
+    ) {
+        FilmItem(film = films[it], Modifier
+            .fillMaxWidth()
+            .padding(0.dp, 16.dp, 0.dp, 0.dp)
+            .graphicsLayer {
+                // Calculate the absolute offset for the current page from the
+                // scroll position. We use the absolute value which allows us to mirror
+                // any effects for both directions
+                val pageOffset = calculateCurrentOffsetForPage(it)
 
+                // We animate the scaleX + scaleY, between 85% and 100%
+                lerp(
+                    start = 0.85f,
+                    stop = 1f,
+                    fraction = 1f - pageOffset.coerceIn(0f, 1f)
+                ).also { scale ->
+                    scaleX = scale
+                    scaleY = scale
+                }
 
+                // We animate the alpha, between 50% and 100%
+                alpha = lerp(
+                    start = 0.5f,
+                    stop = 1f,
+                    fraction = 1f - pageOffset.coerceIn(0f, 1f)
+                )
+            }
+        )
+    }
 }
 
 @Composable
@@ -443,7 +453,11 @@ fun LoadingParticle(height: Int, position: Float){
                         .graphicsLayer {
                             translationY = height * translationAnimatable.value
                         }
-                        .alpha(Random.nextInt(50, 100).toFloat() / 100f)
+                        .alpha(
+                            Random
+                                .nextInt(50, 100)
+                                .toFloat() / 100f
+                        )
                 )
         }
     }
