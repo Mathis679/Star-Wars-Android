@@ -390,7 +390,7 @@ fun LoadingImage(width: Int){
         )
     }
     Image(
-        painterResource(R.drawable.ic_spaceship),
+        painterResource(R.drawable.ic_millenniumfalcon),
         contentDescription = "spaceship loading",
         contentScale = ContentScale.Crop,
         modifier = Modifier
@@ -405,7 +405,7 @@ fun LoadingImage(width: Int){
                 translationX =
                     if (translateImageAnimatable.value < 0.5f) widthToTranslate * translateImageAnimatable.value * 2 else widthToTranslate * (1f - translateImageAnimatable.value) * 2
                 rotationY =
-                    if (rotateImageAnimatable.value > 1f && rotateImageAnimatable.value <= 1.5f) (rotateImageAnimatable.value - 1f) * 360 else rotationY
+                    if (rotateImageAnimatable.value > 1f && rotateImageAnimatable.value <= 1.5f) (rotateImageAnimatable.value - 1f) * 720 else rotationY
             }
     )
 }
