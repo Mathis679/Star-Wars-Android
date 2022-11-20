@@ -1,7 +1,6 @@
 package com.example.starwarsappmvvm.di
 
 import android.content.Context
-import com.example.domain.exception.NoInternetException
 import com.example.starwarsappmvvm.config.API_URL
 import com.example.starwarsappmvvm.di.Properties.TIME_OUT
 import com.example.utils.NetworkUtil
@@ -76,9 +75,15 @@ fun getConnectivityInterceptor(context: Context): Interceptor {
     return Interceptor {
 
         if(!NetworkUtil.isConnected(context))
-            throw NoInternetException()
-
-        it.proceed(it.request().newBuilder().build())
+            Response.Builder()
+                .code(666)
+                .protocol(Protocol.HTTP_2)
+                .message("No internet")
+                .body(ResponseBody.create(MediaType.get("application/json"), ""))
+                .request(it.request())
+                .build()
+        else
+            it.proceed(it.request().newBuilder().build())
 
     }
 }

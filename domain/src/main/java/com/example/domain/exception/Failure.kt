@@ -28,6 +28,7 @@ sealed class Failure {
                 404 -> NotFoundError
                 500 -> ServerError
                 502 -> BadGateway
+                666 -> NetworkConnection
                 else -> Unknown
             }
         }
